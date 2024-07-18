@@ -1,7 +1,7 @@
 import pytest
 from .emails_to_invite_repository import EmailsToInviteRepository
 from src.models.settings.db_connection_handler import db_connection_handler
-from datetime import datetime, timedelta
+
 import uuid
 
 db_connection_handler.connect()
