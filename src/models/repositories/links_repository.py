@@ -5,7 +5,7 @@ class LinksRepository:
     def __init__(self, conn: Connection) -> None:
         self.__conn = conn
     
-    def registry_email(self, links_info: Dict) -> None:
+    def registry_link(self, links_info: Dict) -> None:
         cursor = self.__conn.cursor()
         cursor.execute(
             '''

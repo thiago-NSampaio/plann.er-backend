@@ -9,7 +9,7 @@ link_id = str(uuid.uuid4())
 
 
 # pytest.mark(reason="Interação com o Banco")
-def test_registry_email():
+def test_registry_link():
     conn = db_connection_handler.get_connection()
     links_repository = LinksRepository(conn)
 
@@ -20,7 +20,7 @@ def test_registry_email():
         "title":"Hotel"
     }
 
-    links_repository.registry_email(links_info)
+    links_repository.registry_link(links_info)
 
 # pytest.mark(reason="Interação com o Banco")
 def test_find_emails_from_trip():
