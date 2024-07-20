@@ -4,11 +4,11 @@ class ActivitiesRepository:
     def __init__(self, conn: Connection) -> None:
         self.__conn = conn
     
-    def registry_activities(self,activities_infos:dict):
+    def registry_activity(self,activities_infos:dict):
         cursor = self.__conn.cursor()
         cursor.execute(
             '''INSERT INTO activities(id, trip_id, title, occurs_at)
-            VALUES(?, ?, ?, ?),
+            VALUES(?, ?, ?, ?)
             ''',(
                 activities_infos["id"],
                 activities_infos["trip_id"],
