@@ -1,5 +1,7 @@
-**/__pychache__
+**/__pycache__/
 .pytest_cache
 venv
 .env
 storage.db
+src/models/repositories/__pycache__/
+src/main/routes/__pycache__/

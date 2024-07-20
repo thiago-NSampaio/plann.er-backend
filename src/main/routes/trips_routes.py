@@ -5,13 +5,16 @@ from flask import jsonify, Blueprint,request
 # importação de Repositórios
 from src.models.repositories.emails_to_invite_repository import EmailsToInviteRepository 
 from src.models.repositories.trips_repository import TripsRepository
+
 from src.models.repositories.links_repository import LinksRepository
 
 # importação de Controllers
 from src.controllers.trip_creator import TripCreator
 from src.controllers.trip_finder import TripFinder
-from src.controllers.link_creator import LinkCreator
 from src.controllers.trip_confirmer import TripConfirmer
+
+from src.controllers.link_creator import LinkCreator
+from src.controllers.link_finder import LinkFinder
 
 trips_route_bp = Blueprint("trips_routes", __name__)
 
@@ -46,12 +49,12 @@ def update_trip(tripId):
 
    return jsonify(response["body"]), response["status_code"]
 
-@trips_route_bp.route("/trips/<tripId>/link", methods=["POST"])
+@trips_route_bp.route("/trips/<tripId>/links", methods=["GET"])
 def create_link(tripId):
    conn =db_connection_handler.get_connection()
    linksRepository = LinksRepository(conn)
-   controller = LinkCreator(linksRepository)
+   controller = LinkFinder(linksRepository)
 
-   response = controller.create(request.json,tripId)
+   response = controller.finder(tripId)
 
    return jsonify(response["body"]), response["status_code"]
