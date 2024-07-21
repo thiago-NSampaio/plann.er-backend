@@ -111,7 +111,7 @@ def get_trip_participants(tripId):
 
    return jsonify(response["body"]), response["status_code"]
 
-@trips_route_bp.route("/trips/<participantId>/participants", methods=["PATCH"])
+@trips_route_bp.route("/trips/<participantId>/confirm", methods=["PATCH"])
 def confirm_participants(participantId):
    conn =db_connection_handler.get_connection()
    participants_repository = ParticipantsRepository(conn)
