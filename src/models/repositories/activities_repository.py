@@ -22,7 +22,7 @@ class ActivitiesRepository:
         cursor = self.__conn.cursor()
         cursor.execute(
             '''SELECT * FROM activities
-               WHERE a.trip_id = ?
+               WHERE trip_id = ?
                ''',(tripId,)
         )
         activities = cursor.fetchall()

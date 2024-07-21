@@ -18,7 +18,10 @@ from src.controllers.link_creator import LinkCreator
 from src.controllers.link_finder import LinkFinder
 
 from src.controllers.participant_creator import ParticipantCreator
+from src.controllers.participant_finder import ParticipantFinder
+from src.controllers.participant_confirmer import ParticipantConfirmer
 
+from src.controllers.activity_finder import ActivityFinder
 from src.controllers.activity_creator import ActivityCreator
 
 trips_route_bp = Blueprint("trips_routes", __name__)
@@ -90,9 +93,42 @@ def invite_to_trip(tripId):
 def create_activity(tripId):
    conn =db_connection_handler.get_connection()
    activities_repository = ActivitiesRepository(conn)
-   print(request.json)
+
    controller = ActivityCreator(activities_repository)
 
    response = controller.create(request.json,tripId)
+
+   return jsonify(response["body"]), response["status_code"]
+
+@trips_route_bp.route("/trips/<tripId>/participants", methods=["GET"])
+def get_trip_participants(tripId):
+   conn =db_connection_handler.get_connection()
+   participants_repository = ParticipantsRepository(conn)
+
+   controller = ParticipantFinder(participants_repository)
+
+   response = controller.finder(tripId)
+
+   return jsonify(response["body"]), response["status_code"]
+
+@trips_route_bp.route("/trips/<participantId>/participants", methods=["PATCH"])
+def confirm_participants(participantId):
+   conn =db_connection_handler.get_connection()
+   participants_repository = ParticipantsRepository(conn)
+
+   controller = ParticipantConfirmer(participants_repository)
+
+   response = controller.confirm(participantId)
+
+   return jsonify(response["body"]), response["status_code"]
+
+@trips_route_bp.route("/trips/<tripId>/activities", methods=["GET"])
+def get_trip_activities(tripId):
+   conn =db_connection_handler.get_connection()
+   activities_repository = ActivitiesRepository(conn)
+
+   controller = ActivityFinder(activities_repository)
+
+   response = controller.finder(tripId)
 
    return jsonify(response["body"]), response["status_code"]

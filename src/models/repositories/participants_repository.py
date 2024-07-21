@@ -21,16 +21,16 @@ class ParticipantsRepository:
     def find_participants_from_trip(self, tripId) -> list[tuple]:
         cursor = self.__conn.cursor()
         cursor.execute(
-            '''SELECT p.id, p.trip_id, p.name, e.email
+            '''SELECT p.id, p.name, p.is_confirmed, e.email
                FROM participants as p
-               JOIN email_to_invite as e ON e.id = p.emails_to_invite_id
+               JOIN emails_to_invite as e ON e.id = p.emails_to_invite_id
                WHERE p.trip_id = ?
                ''',(tripId,)
         )
         participants = cursor.fetchall()
         return participants
     
-    def update_participant(self, participant_id: str) ->None:
+    def update_participant_status(self, participant_id: str) ->None:
         cursor = self.__conn.cursor()
         cursor.execute(
             '''UPDATE participants
