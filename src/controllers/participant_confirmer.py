@@ -7,7 +7,7 @@ class ParticipantConfirmer:
             self.__participants_repository.update_participant_status(participantId)
             return {"body":None,"status_code":204}
         except Exception as e:
-            return{
-                "body":{"error": "Bad Request", "message": str(e),
-                "status_code":400}
+               return {
+                "body": { "error": "Bad Request", "message": str(e)},
+                "status_code": 400
             }

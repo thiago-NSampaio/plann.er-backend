@@ -21,7 +21,7 @@ class LinkCreator:
                 "status_code": 201
             }
         except Exception as exception:
-            return {
-                "body":{"error": "Bad Request", "message": str(exception),
-                "status_code": 400}
+          return {
+                "body": { "error": "Bad Request", "message": str(exception)},
+                "status_code": 400
             }
