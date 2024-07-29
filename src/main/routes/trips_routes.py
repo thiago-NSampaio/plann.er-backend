@@ -13,6 +13,7 @@ from src.models.repositories.activities_repository import ActivitiesRepository
 from src.controllers.trip_creator import TripCreator
 from src.controllers.trip_finder import TripFinder
 from src.controllers.trip_confirmer import TripConfirmer
+from src.controllers.trip_update import TripUpdate
 
 from src.controllers.link_creator import LinkCreator
 from src.controllers.link_finder import LinkFinder
@@ -130,5 +131,16 @@ def get_trip_activities(tripId):
    controller = ActivityFinder(activities_repository)
 
    response = controller.finder(tripId)
+
+   return jsonify(response["body"]), response["status_code"]
+
+@trips_route_bp.route("/trips/<tripId>", methods=["PUT"])
+def trip_update(tripId):
+   conn =db_connection_handler.get_connection()
+   trips_repository = TripsRepository(conn)
+
+   controller = TripUpdate(trips_repository)
+
+   response = controller.update(tripId,request.json)
 
    return jsonify(response["body"]), response["status_code"]

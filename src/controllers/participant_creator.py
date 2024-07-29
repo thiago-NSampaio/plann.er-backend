@@ -1,5 +1,4 @@
 import uuid
-import logging
 
 class ParticipantCreator:
     def __init__(self, participants_repository, emails_repository) -> None:

@@ -1,11 +1,10 @@
 from sqlite3 import Connection
-from typing import Dict,Tuple
 
 class TripsRepository:
     def __init__(self, conn: Connection) -> None:
         self.__conn = conn
     
-    def create_trip(self, trips_infos: Dict) -> None:
+    def create_trip(self, trips_infos: dict) -> None:
         cursor = self.__conn.cursor()
         cursor.execute(
             '''
@@ -25,7 +24,7 @@ class TripsRepository:
         )
         self.__conn.commit()
 
-    def find_trip_by_id(self, trip_id: str)->Tuple:
+    def find_trip_by_id(self, trip_id: str)->tuple:
         cursor = self.__conn.cursor()
         cursor.execute(
                 '''SELECT * FROM trips WHERE id = ?''',(trip_id,)
@@ -38,4 +37,17 @@ class TripsRepository:
         cursor.execute(
             '''UPDATE trips SET status = 1 WHERE id = ?''',(trip_id,)
         )
+        self.__conn.commit()
+
+    def upadate_trip(self,tripId:str, infos_trip_update: dict):
+        cursor = self.__conn.cursor()
+        cursor.execute(
+            '''UPDATE trips SET destination = ?, start_date = ?, end_date = ? WHERE id = ?''',(
+                infos_trip_update["destination"],
+                infos_trip_update["start_date"],
+                infos_trip_update["end_date"],
+                tripId, 
+            )
+        )
+
         self.__conn.commit()
