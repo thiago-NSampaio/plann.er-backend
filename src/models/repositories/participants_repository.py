@@ -39,3 +39,9 @@ class ParticipantsRepository:
         )
         self.__conn.commit()
 
+    def delete_participant(self, participant_id:str, trip_Id: str)-> None:
+        cursor = self.__conn.cursor()
+        cursor.execute('DELETE FROM participants WHERE id = ? and trip_id = ?', (participant_id,trip_Id))
+        self.__conn.commit()
+
+
