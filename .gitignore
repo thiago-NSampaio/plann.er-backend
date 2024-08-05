@@ -5,3 +5,4 @@ venv
 storage.db
 src/models/repositories/__pycache__/
 src/main/routes/__pycache__/
+*.cpython-312.pyc

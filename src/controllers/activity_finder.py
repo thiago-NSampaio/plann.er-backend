@@ -1,23 +1,30 @@
 from collections import defaultdict
 
+
 class ActivityFinder:
     def __init__(self, activities_repository) -> None:
         self.__activities_repository = activities_repository
-    
-    def finder(self, tripId) -> dict:
+
+    def finder(self, trip_id: str) -> dict:
         try:
-            activities = self.__activities_repository.find_activities_from_trip(tripId)
+            # Obtenha atividades para a viagem especificada
+            activities = self.__activities_repository.find_activities_from_trip(
+                trip_id)
             grouped_activities = defaultdict(list)
 
+            # Agrupe atividades por data
             for activity in activities:
-                date = activity[3].split("T")[0] 
+                # Acesse atributos diretamente dos objetos Activity
+                date = activity.occurs_at.strftime(
+                    '%Y-%m-%d')  # Formata a data
                 grouped_activities[date].append({
-                    "id": activity[0],
-                    "trip_id": activity[1],
-                    "title": activity[2],
-                    "occurs_at": activity[3]
+                    "id": activity.id,
+                    "trip_id": activity.trip_id,
+                    "title": activity.title,
+                    "occurs_at": activity.occurs_at.isoformat()  # Formata a data e hora
                 })
 
+            # Formate a lista de atividades agrupadas
             formatted_activity = [
                 {"date": date, "activities": acts}
                 for date, acts in grouped_activities.items()
@@ -29,6 +36,6 @@ class ActivityFinder:
             }
         except Exception as e:
             return {
-                "body": { "error": "Bad Request", "message": str(e) },
+                "body": {"error": "Bad Request", "message": str(e)},
                 "status_code": 400
             }

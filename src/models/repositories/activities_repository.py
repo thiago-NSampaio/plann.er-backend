@@ -1,30 +1,29 @@
-from sqlite3 import Connection
+from sqlalchemy.orm import Session
+from src.models.settings.initDB import Activity
+from datetime import datetime
+
 
 class ActivitiesRepository:
-    def __init__(self, conn: Connection) -> None:
-        self.__conn = conn
-    
-    def registry_activity(self,activities_infos:dict):
-        cursor = self.__conn.cursor()
-        cursor.execute(
-            '''INSERT INTO activities(id, trip_id, title, occurs_at)
-            VALUES(?, ?, ?, ?)
-            ''',(
-                activities_infos["id"],
-                activities_infos["trip_id"],
-                activities_infos["title"],
-                activities_infos["occurs_at"],
-            )
-        )
-        self.__conn.commit()
+    def __init__(self, session: Session) -> None:
+        self.__session = session
 
-    def find_activities_from_trip(self, tripId) -> list[tuple]:
-        cursor = self.__conn.cursor()
-        cursor.execute(
-            '''SELECT * FROM activities
-               WHERE trip_id = ?
-               ''',(tripId,)
+    def registry_activity(self, activities_infos: dict):
+        occurs_at = datetime.fromisoformat(
+            activities_infos["occurs_at"].replace("Z", "+00:00"))
+        new_activity = Activity(
+            id=activities_infos["id"],
+            trip_id=activities_infos["trip_id"],
+            title=activities_infos["title"],
+            occurs_at=occurs_at
         )
-        activities = cursor.fetchall()
-        return activities
-    
+        self.__session.add(new_activity)
+        self.__session.commit()
+
+    def find_activities_from_trip(self, trip_id: str) -> list[Activity]:
+        try:
+            activities = self.__session.query(
+                Activity).filter_by(trip_id=trip_id).all()
+            return activities
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return []

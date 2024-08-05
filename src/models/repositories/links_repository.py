@@ -1,34 +1,29 @@
-from sqlite3 import Connection
-from typing import Dict,Tuple,List
+from sqlalchemy.orm import Session
+from src.models.settings.initDB import Link
+
 
 class LinksRepository:
-    def __init__(self, conn: Connection) -> None:
-        self.__conn = conn
-    
-    def registry_link(self, links_info: Dict) -> None:
-        cursor = self.__conn.cursor()
-        cursor.execute(
-            '''
-                INSERT INTO links
-                    (id, trip_id,link,title)
-                VALUES
-                    (?, ?, ?,?)
-            ''',
-            (
-                links_info["id"],
-                links_info["trip_id"],
-                links_info["link"],
-                links_info["title"]
+    def __init__(self, session: Session) -> None:
+        self.__session = session
 
-            )
+    def registry_link(self, links_info: dict) -> None:
+        new_link = Link(
+            id=links_info["id"],
+            trip_id=links_info["trip_id"],
+            link=links_info["link"],
+            title=links_info["title"]
         )
-        self.__conn.commit()
+        self.__session.add(new_link)
+        self.__session.commit()
+        self.__session.close()
 
-    def find_links_from_trip(self, trip_id: str)->List[tuple]:
-        cursor = self.__conn.cursor()
-        cursor.execute(
-                '''SELECT * FROM links WHERE trip_id = ?''',(trip_id,)
-        )
+    def find_links_from_trip(self, trip_id: str) -> list[Link]:
+        if trip_id is None:
+            raise ValueError("trip_id cannot be None")
 
-        links = cursor.fetchall()
+        links = self.__session.query(Link).filter_by(trip_id=trip_id).all()
+
+        if links is None:
+            raise ValueError("Query result is None, expected a list")
+
         return links

@@ -1,29 +1,31 @@
-from typing import Dict
+from datetime import datetime
+
 
 class TripFinder:
-    def __init__(self, trips_repository) -> None:
+    def __init__(self, trips_repository):
         self.__trips_repository = trips_repository
 
-    def find_trip_details(self, trip_id) -> Dict:
-        try:
-            trip = self.__trips_repository.find_trip_by_id(trip_id)
-            if not trip:
-                raise Exception("No trip found")
-
+    def find_trip_details(self, trip_id):
+        trip = self.__trips_repository.find_trip_by_id(trip_id)
+        if trip:
             return {
                 "body": {
                     "trip": {
-                        "id": trip[0],
-                        "destination": trip[1],
-                        "starts_at": trip[2],
-                        "ends_at": trip[3],
-                        "status": trip[6]
+                        "id": trip.id,
+                        "destination": trip.destination,
+                        # Converte date para string no formato ISO
+                        "start_date": trip.start_date.isoformat(),
+                        # Converte date para string no formato ISO
+                        "end_date": trip.end_date.isoformat(),
+                        "owner_name": trip.owner_name,
+                        "owner_email": trip.owner_email,
+                        "status": trip.status
                     }
                 },
                 "status_code": 200
             }
-        except Exception as exception:
+        else:
             return {
-                "body": {"error": "Bad Request", "message": str(exception)},
-                "status_code": 400
+                "body": {"error": "Trip not found"},
+                "status_code": 404
             }

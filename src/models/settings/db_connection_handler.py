@@ -1,22 +1,22 @@
-import sqlite3
-from sqlite3 import Connection
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-class DbConnectionHandler:
-    def __init__(self) -> None:
-        self.__connection_string = "storage.db"
-        self.__conn = None
+class DBConnectionHandler:
+    def __init__(self):
+        self.__connection_string = 'sqlite:///storage.db'
+        self.__engine = create_engine(self.__connection_string)
+        self.__session = None
 
-    def connect(self) -> None:
-        self.__conn = sqlite3.connect(self.__connection_string, check_same_thread=False)
+    def connect(self):
+        self.__session = sessionmaker(bind=self.__engine)()
+        return self.__session
 
-    def get_connection(self) -> Connection:
-        if self.__conn is None:
-            raise ConnectionError("Database connection is not established.")
-        return self.__conn
+    def get_connection(self):
+        if self.__session is None:
+            self.connect()
+        return self.__session
 
-    def disconnect(self) -> None:
-        if self.__conn:
-            self.__conn.close()
-            self.__conn = None
-
-db_connection_handler = DbConnectionHandler()
+    def close_connection(self):
+        if self.__session:
+            self.__session.close()
+            self.__session = None
