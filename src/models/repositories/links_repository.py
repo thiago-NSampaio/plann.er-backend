@@ -18,12 +18,5 @@ class LinksRepository:
         self.__session.close()
 
     def find_links_from_trip(self, trip_id: str) -> list[Link]:
-        if trip_id is None:
-            raise ValueError("trip_id cannot be None")
-
         links = self.__session.query(Link).filter_by(trip_id=trip_id).all()
-
-        if links is None:
-            raise ValueError("Query result is None, expected a list")
-
         return links
