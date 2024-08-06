@@ -25,7 +25,6 @@ class TripsRepository:
 
         self.__session.add(new_trip)
         self.__session.commit()
-        self.__session.close()
 
     def find_trip_by_id(self, trip_id: str) -> Trip:
         return self.__session.query(Trip).filter_by(id=trip_id).first()

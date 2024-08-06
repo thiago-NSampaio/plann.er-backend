@@ -8,7 +8,7 @@ Base = declarative_base()
 
 class Trip(Base):
     __tablename__ = 'trips'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String, primary_key=True)
     destination = Column(String, index=True)
     start_date = Column(DateTime)
     end_date = Column(DateTime)

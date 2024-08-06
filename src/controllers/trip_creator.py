@@ -10,7 +10,6 @@ class TripCreator:
 
     def create(self, body) -> Dict:
         try:
-            print(body)
             emails = body.get("emails_to_invite")
             trip_id = str(uuid.uuid4())
 

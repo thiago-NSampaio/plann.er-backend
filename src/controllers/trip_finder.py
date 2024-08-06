@@ -6,17 +6,15 @@ class TripFinder:
         self.__trips_repository = trips_repository
 
     def find_trip_details(self, trip_id):
-        trip = self.__trips_repository.find_trip_by_id(trip_id)
-        if trip:
+        try:
+            trip = self.__trips_repository.find_trip_by_id(trip_id)
             return {
                 "body": {
                     "trip": {
                         "id": trip.id,
                         "destination": trip.destination,
-                        # Converte date para string no formato ISO
-                        "start_date": trip.start_date.isoformat(),
-                        # Converte date para string no formato ISO
-                        "end_date": trip.end_date.isoformat(),
+                        "start_date": trip.start_date,
+                        "end_date": trip.end_date,
                         "owner_name": trip.owner_name,
                         "owner_email": trip.owner_email,
                         "status": trip.status
@@ -24,8 +22,8 @@ class TripFinder:
                 },
                 "status_code": 200
             }
-        else:
+        except Exception as e:
             return {
-                "body": {"error": "Trip not found"},
+                "body": {"error": "Bad Request", "message": str(e)},
                 "status_code": 404
             }

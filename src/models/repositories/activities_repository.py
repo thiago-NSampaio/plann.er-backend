@@ -20,10 +20,6 @@ class ActivitiesRepository:
         self.__session.commit()
 
     def find_activities_from_trip(self, trip_id: str) -> list[Activity]:
-        try:
-            activities = self.__session.query(
-                Activity).filter_by(trip_id=trip_id).all()
-            return activities
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            return []
+        activities = self.__session.query(
+            Activity).filter_by(trip_id=trip_id).all()
+        return activities

@@ -121,8 +121,6 @@ def create_activity(tripId):
 
     controller = ActivityCreator(activities_repository)
 
-    print(request.json)
-
     response = controller.create(request.json, tripId)
 
     return jsonify(response["body"]), response["status_code"]
