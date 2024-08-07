@@ -9,6 +9,6 @@ def start_app():
     db_connection_handler.connect()
 
 
+start_app()
 if __name__ == "__main__":
-    start_app()
     app.run(host="0.0.0.0", port=3333, debug=False)
